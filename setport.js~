@@ -103,46 +103,31 @@ app.use(function(req, res, next){
   next();
 });
 
-// respond
-//app.use(function(req, res, next){
-//  res.send('Hello World');
-//});
 
 
-// Listen on port 8000, IP defaults to 127.0.0.1
+// Listen on port 80, IP defaults to 127.0.0.1
 app.listen(80);
 
 
+var ports = new Array(); //the libery is doing a mapping that is obsolete and is complicating everything.. now its already to late
+ports[1] = 16; // raspberry pi
+ports[2] = 15; // GP22 usb 3.0 external HDD
+ports[3] = 22; // GP25 Dell Monitor
+ports[4] = 7;  // GP4 stereo
+ports[5] = 12; // GP18 hornbach lamp
+ports[6] = 11; // GP17 ikea lamp
+ports[7] = 18; // GP24 samsung monitor 
 
-
-
-// Put a friendly message on the terminal
-sys.puts("Server running at http://127.0.0.1:8000/");
-
-
-var ports = new Array();
-ports[1] = 16;
-ports[2] = 15;
-ports[3] = 7;
-ports[4] = 22;
-ports[5] = 12;
-//ports[5] = 22;
-ports[6] = 11;
-ports[7] = 18;
-
-var states = new Array();
+var states = new Array(); //not used now
 states[0] = 0;
 states[1] = 1;
 
 
 function setGPIO(pin, state, callback) {  
 	sys.puts("Setting Pin: " + pin + " to " + state);  
-	gpio.open(ports[pin], "output", function(err) {        // port 2
-    		gpio.write(ports[pin], state, function() {            // Set port 2 high (1)
-    		});
-	});
+    		gpio.write(ports[pin], state);
+
     
-	callback();  
 }  
 
 function initGPIO(pin, callback) {  
@@ -176,7 +161,7 @@ function toggleStateFromGPIO(pin, callback) {
 		    if (value == 0){
 		    
 			    console.log('The new value is 1');
-		//	    gpio.write(ports[pin], 1);
+			    gpio.write(ports[pin], 1);
 		    }
 		    else if(value == 1){
 		    
@@ -198,11 +183,6 @@ function getDirectionFromGPIO(pin, callback) {
 	    })
 }  
 
-//gpio.open(16, "output", function(err) {        // port 1
-//    gpio.write(16, 1, function() {            // Set port 1 high (1)
-//        gpio.close(16);                        // Close port 1
-//    });
-//});
 
 port_states = new Array();
 
