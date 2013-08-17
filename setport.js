@@ -135,11 +135,18 @@ function setGPIO(pin, state, callback) {
 
 function getGPIO(pin, callback) {  
 	sys.puts("Getting state of Pin: " + pin );  
-	gpio.open(pin,  function(err,value) {        // port 
-    		gpio.read(pin,  function() {            // read port state
-        		gpio.close(pin);                        // Close port 
-    		});
-	});
+
+	gpio.setup(pin, gpio.DIR_IN, readInput);
+
+	function readInput() {
+	    gpio.read(pin, function(err, value) {
+	        console.log('The value is ' + value);
+		port_states[pin] = pin;
+	    });
+	}
+
+
+
     
 	callback();  
 }  
@@ -149,6 +156,16 @@ function getGPIO(pin, callback) {
 //        gpio.close(16);                        // Close port 1
 //    });
 //});
+
+port_states = new Array();
+
+for( var i = 1; i <= 7; i++ ) {
+
+getGPIO(i);
+
+
+}
+
 
 setGPIO(ports[7],0, function(){
         
