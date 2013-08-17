@@ -110,6 +110,8 @@ app.listen(80);
 
 
 var ports = new Array(); //the libery is doing a mapping that is obsolete and is complicating everything.. now its already to late
+// https://github.com/rakeshpai/pi-gpio/blob/master/pi-gpio.js
+//
 ports[1] = 16; // raspberry pi
 ports[2] = 15; // GP22 usb 3.0 external HDD
 ports[3] = 22; // GP25 Dell Monitor
