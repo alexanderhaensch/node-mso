@@ -41,7 +41,7 @@ var ports = {
         
 	});
   },
-  toggle: function(req, res){
+  switchit: function(req, res){
     res.send('Going to set port ' + req.params.portid + ' to ' + req.params.state);
 	setGPIO(ports[req.params.portid],states[req.params.state], function(){
 
@@ -49,15 +49,7 @@ var ports = {
         
 	});
   },
-  readDirection: function(req, res){
-    res.send('Going to get port ' + req.params.portid );
-	getDirectionFromGPIO(req.params.portid, function(){
-
-        sys.puts("getted ");
-        
-	});
-  },
-  readState: function(req, res){
+  read: function(req, res){
     res.send('Going to get port ' + req.params.portid );
 	getDirectionFromGPIO(req.params.portid, function(){
 
@@ -79,15 +71,11 @@ app.map({
 	        	'/:state': {
 	              	get: ports.set
         		}},
-		'/toggle':
-		{
-	              	get: ports.toggle
-		},
-		'/getdirection': {
-			get: ports.readDirection
-      			},
-		'/getstate': {
-			get: ports.readState
+		'/switchit': {'/:state':{
+	              	get: ports.switchit
+		}},
+		'/get': {
+			get: ports.read
       			}
         
 		}
@@ -147,12 +135,11 @@ function setGPIO(pin, state, callback) {
 }  
 
 function getStateFromGPIO(pin, callback) {  
+	sys.puts("Getting state of Pin: " + ports[pin] );  
 
 	    gpio.read(ports[pin], function(err, value) {
 	
 	   	    if(err) throw err;
-
-	    	    sys.puts("Getting state of Pin: " + ports[pin] );  
 		    console.log('The value is ' + value);
 	
 	    	    port_states[pin] = value;
