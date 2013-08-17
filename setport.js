@@ -35,15 +35,15 @@ var ports = {
 
   set: function(req, res){
     res.send('Going to set port ' + req.params.portid + ' to ' + req.params.state);
-	setGPIO(ports[req.params.portid],states[req.params.state], function(){
+	setGPIO(req.params.portid,states[req.params.state], function(){
 
         sys.puts("Setted ");
         
 	});
   },
   toggle: function(req, res){
-    res.send('Going to set port ' + req.params.portid + ' to ' + req.params.state);
-	setGPIO(ports[req.params.portid],states[req.params.state], function(){
+    res.send('toggle port ' + req.params.portid );
+	toggleStateFromGPIO(req.params.portid, function(){
 
         sys.puts("Setted ");
         
@@ -59,7 +59,7 @@ var ports = {
   },
   readState: function(req, res){
     res.send('Going to get port ' + req.params.portid );
-	getDirectionFromGPIO(req.params.portid, function(){
+	getStateFromGPIO(req.params.portid, function(){
 
         sys.puts("getted ");
         
@@ -137,47 +137,65 @@ states[1] = 1;
 
 function setGPIO(pin, state, callback) {  
 	sys.puts("Setting Pin: " + pin + " to " + state);  
-	gpio.open(pin, "output", function(err) {        // port 2
-    		gpio.write(pin, state, function() {            // Set port 2 high (1)
-        		gpio.close(pin);                        // Close port 2
+	gpio.open(ports[pin], "output", function(err) {        // port 2
+    		gpio.write(ports[pin], state, function() {            // Set port 2 high (1)
     		});
 	});
     
 	callback();  
 }  
 
-function getStateFromGPIO(pin, callback) {  
-
+function initGPIO(pin, callback) {  
+	gpio.open(ports[pin], "output", function(err) { 
 	    gpio.read(ports[pin], function(err, value) {
 	
-	   	    if(err) throw err;
-
-	    	    sys.puts("Getting state of Pin: " + ports[pin] );  
-		    console.log('The value is ' + value);
-	
-	    	    port_states[pin] = value;
-	    });
-
-
-
-    
-}  
-function getDirectionFromGPIO(pin, callback) {  
-	gpio.open(ports[pin], "output", function(err) { 
-	    gpio.getDirection(ports[pin], function(err, value) {
-	
 		    sys.puts("Getting state of Pin: " + ports[pin] );  
-	
 		    console.log('The value is ' + value);
-	
 	    	    port_states[pin] = value;
-		    gpio.close(ports[pin]);
+
 	    })
 	    });
+}  
+function getStateFromGPIO(pin, callback) {  
+	    gpio.read(ports[pin], function(err, value) {
 
+	    if (err) throw err;	    
+		    sys.puts("Getting state of Pin: " + ports[pin] );  
+		    console.log('The value is ' + value);
+	    	    port_states[pin] = value;
 
+	    })
+}  
+function toggleStateFromGPIO(pin, callback) {  
+	    gpio.read(ports[pin], function(err, value) {
+		
+	    if (err){throw err}	    
+		    sys.puts("Getting state of Pin: " + ports[pin] );  
+		    console.log('The value is ' + value);
+	    	    
+		    if (value == 0){
+		    
+			    console.log('The new value is 1');
+		//	    gpio.write(ports[pin], 1);
+		    }
+		    else if(value == 1){
+		    
+			    console.log('The new value is 0');
+			    gpio.write(ports[pin], 0);
+		    }
 
-    
+		    port_states[pin] = value;
+
+	});
+}  
+function getDirectionFromGPIO(pin, callback) {  
+	    gpio.getDirection(ports[pin], function(err, value) {
+	
+		    sys.puts("Getting direction of Pin: " + ports[pin] );  
+		    console.log('The value is ' + value);
+	    	    port_states[pin] = value;
+
+	    })
 }  
 
 //gpio.open(16, "output", function(err) {        // port 1
@@ -191,7 +209,7 @@ port_states = new Array();
 for( var i = 1; i <= 7; i++ ) {
 
 //getDirectionFromGPIO(i);
-//getStateFromGPIO(i);
+initGPIO(i);
 
 
 }
