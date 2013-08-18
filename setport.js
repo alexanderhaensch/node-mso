@@ -5,6 +5,11 @@ var http = require('http');
 var express = require('express');
 var app = express();
 
+
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+
+
 // app route mapping 
 app.map = function(a, route){
   route = route || '';
@@ -31,6 +36,9 @@ var ports = {
 
   get: function(req, res){
     res.send('port ' + req.params.portid);
+  },
+  index: function(req, res){
+    res.render('index.html');
   },
 
   set: function(req, res){
@@ -71,6 +79,10 @@ var ports = {
 // app structure
 
 app.map({
+	'/':{
+		get: ports.index
+	},
+
   '/port': {
       get: ports.list,
 	'/:portid': {

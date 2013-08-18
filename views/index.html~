@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>
+Multi socket outlet.. lets choose actions</title>
+<meta name="description" content="index for the multi socket outlet">
+<style type="text/css">
+body {background-color:ffffff;background-image:url(http://);background-repeat:no-repeat;background-position:top left;background-attachment:fixed;}
+h1{font-family:Arial;color:000000;}
+p {font-family:Helvetica;font-size:24px;font-style:normal;font-weight:normal;color:000000;}
+</style>
+</head>
+<body>
+<h1>following action are possible</h1>
+<p>choose one</p>
+
+<p><a href=port/2/toggle>Toggle - USB 3 external HDD</a></p>
+<p><a href=port/3/toggle>Toggle - Dell Monitor</a></p>
+<p><a href=port/4/toggle>Toggle - Kennwood Hifi</a></p>
+<p><a href=port/5/toggle>Toggle - White Lamp</a></p>
+<p><a href=port/6/toggle>Toggle - Silver Lamp</a></p>
+<p><a href=port/7/toggle>Toggle - Samsung Monitor</a></p>
+
+
+</body>
+</html>
+
